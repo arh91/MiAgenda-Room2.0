@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Supplier::class, Supplier::class], version = 1)
+@Database(entities = [Customer::class, Supplier::class], version = 1)
 abstract class AgendaDatabase : RoomDatabase() {
     abstract fun peticionesDao(): PeticionesDao
 
