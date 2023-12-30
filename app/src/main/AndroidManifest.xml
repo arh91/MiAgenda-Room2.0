@@ -14,6 +14,30 @@
         android:theme="@style/Theme.Agenda"
         tools:targetApi="31">
         <activity
+            android:name=".CustomersDetail"
+            android:exported="false" />
+        <activity
+            android:name=".SuppliersDetail"
+            android:exported="false" />
+        <activity
+            android:name=".ListCustomersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListSuppliersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FifthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FourthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ThirdActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SecondActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
