@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 class FifthActivity : AppCompatActivity() {
 
@@ -36,11 +37,11 @@ class FifthActivity : AppCompatActivity() {
         setContentView(R.layout.activity_fifth)
 
 
-        /*val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
         val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
         val factory = MyViewModelFactory(customerRepository, supplierRepository)
         myViewModel = ViewModelProvider(this, factory).get(MyViewModel::class.java)
-        customerAdapter = CustomersAdapter()*/
+        //customerAdapter = CustomersAdapter()
 
         //Inicializamos variables para identificar los editText y Buttons del layout
         codigoCliente = findViewById<EditText>(R.id.edtCodigoCliente)

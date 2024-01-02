@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyViewModel(private val customerRepository: CustomerRepository, private val supplierRepository:SupplierRepository) : ViewModel() {
@@ -20,7 +21,7 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
     val suppliers: LiveData<List<Supplier>> get() = _suppliers
 
     fun insertCustomer(c: Customer) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             customerRepository.insertCustomer(c)
         }
     }
@@ -30,30 +31,33 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
     }
 
     fun loadCustomers() {
-        _customers.value = customerRepository.getAllCustomers()
+        viewModelScope.launch(Dispatchers.IO){
+            val customers = customerRepository.getAllCustomers()
+            _customers.postValue(customers)
+        }
     }
 
     fun loadCustomerDetails(customerId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val customer = customerRepository.getCustomerDetails(customerId)
             _customerDetails.postValue(customer)
         }
     }
 
     fun deleteCustomer(codigo: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             customerRepository.deleteCustomerById(codigo)
         }
     }
 
     fun updateCustomer(codigo: String, nuevoNombre: String, nuevaDireccion: String, nuevoTelefono: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             customerRepository.updateCustomerById(codigo, nuevoNombre, nuevaDireccion, nuevoTelefono)
         }
     }
 
     fun insertSupplier(s: Supplier) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             supplierRepository.insertSupplier(s)
         }
     }
@@ -63,24 +67,27 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
     }
 
     fun loadSuppliers() {
-        _suppliers.value = supplierRepository.getAllSuppliers()
+        viewModelScope.launch(Dispatchers.IO) {
+            val suppliers = supplierRepository.getAllSuppliers()
+            _suppliers.postValue(suppliers)
+        }
     }
 
     fun loadSupplierDetails(supplierId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val supplier = supplierRepository.getSupplierDetails(supplierId)
             _supplierDetails.postValue(supplier)
         }
     }
 
     fun deleteSupplier(codigo: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             supplierRepository.deleteSupplierById(codigo)
         }
     }
 
     fun updateSupplier(codigo: String, nuevoNombre: String, nuevaDireccion: String, nuevoTelefono: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             supplierRepository.updateSupplierById(codigo, nuevoNombre, nuevaDireccion, nuevoTelefono)
         }
     }

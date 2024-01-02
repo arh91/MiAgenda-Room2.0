@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 
 class FourthActivity : AppCompatActivity() {
@@ -37,6 +38,11 @@ class FourthActivity : AppCompatActivity() {
         insertarDatos = findViewById<Button>(R.id.btnEnviarProveedor)
         atras = findViewById<Button>(R.id.btnAtrasFourth)
         listaProveedores = findViewById<Button>(R.id.btnListaProveedores)
+
+        val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val factory = MyViewModelFactory(customerRepository, supplierRepository)
+        myViewModel = ViewModelProvider(this, factory).get(MyViewModel::class.java)
 
         //Añadimos evento al botón insertarDatos
 

@@ -15,14 +15,15 @@ class ListCustomersActivity : AppCompatActivity(){
     lateinit var myViewModel: MyViewModel
     lateinit var customerAdapter: CustomersAdapter
     private lateinit var atras: Button
-    //private lateinit var firebaseDatabase: FirebaseDatabase
-    //private lateinit var databaseReference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_customers)
 
-        myViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val factory = MyViewModelFactory(customerRepository, supplierRepository)
+        myViewModel = ViewModelProvider(this, factory).get(MyViewModel::class.java)
 
         val onItemClickListener: (String) -> Unit = { code ->
             // Manejar el clic en un elemento para abrir una nueva pantalla con detalles

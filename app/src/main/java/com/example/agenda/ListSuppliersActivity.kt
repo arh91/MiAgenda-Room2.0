@@ -22,7 +22,10 @@ class ListSuppliersActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_suppliers)
 
-        myViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val factory = MyViewModelFactory(customerRepository, supplierRepository)
+        myViewModel = ViewModelProvider(this, factory).get(MyViewModel::class.java)
 
         val onItemClickListener: (String) -> Unit = { code ->
             // Manejar el clic en un elemento para abrir una nueva pantalla con detalles
