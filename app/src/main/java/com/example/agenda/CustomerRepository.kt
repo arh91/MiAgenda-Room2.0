@@ -8,12 +8,16 @@ class CustomerRepository (private val peticionesDao: PeticionesDao) {
         peticionesDao.insertCustomer(c)
     }
 
-    fun getAllCustomers(): List<Customer> {
+    suspend fun getAllCustomers(): List<Customer> {
         return peticionesDao.getAllCustomers()
     }
 
     suspend fun getCustomerDetails(customerId: String): Customer {
         return peticionesDao.getCustomerById(customerId)
+    }
+
+    suspend fun getCustomerByName(customerName: String): List<Customer>{
+        return peticionesDao.getCustomerByName(customerName)
     }
 
     suspend fun deleteCustomerById(customerId: String){
@@ -25,7 +29,7 @@ class CustomerRepository (private val peticionesDao: PeticionesDao) {
     }
 
 
-    fun isCodigoCustomerExists(codigo: String): LiveData<Boolean> {
+    suspend fun isCodigoCustomerExists(codigo: String): LiveData<Boolean> {
         return peticionesDao.isCodigoCustomerExists(codigo)
     }
 

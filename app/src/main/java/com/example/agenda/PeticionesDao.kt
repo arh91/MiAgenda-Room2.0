@@ -9,13 +9,16 @@ import androidx.room.Query
 interface PeticionesDao {
 
     @Insert
-    fun insertCustomer(c: Customer)
+    suspend fun insertCustomer(c: Customer)
 
     @Query("SELECT * FROM Customer")
-    fun getAllCustomers(): List<Customer>
+    suspend fun getAllCustomers(): List<Customer>
 
     @Query("SELECT * FROM Customer WHERE codigoCli = :customerId")
     suspend fun getCustomerById(customerId: String): Customer
+
+    @Query("SELECT * FROM Customer WHERE nombreCli = :customerName")
+    suspend fun getCustomerByName(customerName: String): List<Customer>
 
     @Query("DELETE FROM Customer WHERE codigoCli = :customerId")
     suspend fun deleteCustomerById(customerId: String)
@@ -24,13 +27,16 @@ interface PeticionesDao {
     suspend fun updateCustomerById(customerId: String, customerName: String, customerAddress: String, customerPhone: String)
 
     @Insert
-    fun insertSupplier(s: Supplier)
+    suspend fun insertSupplier(s: Supplier)
 
     @Query("SELECT * FROM Supplier")
-    fun getAllSuppliers(): List<Supplier>
+    suspend fun getAllSuppliers(): List<Supplier>
 
     @Query("SELECT * FROM Supplier WHERE codigoProv = :supplierId")
     suspend fun getSupplierById(supplierId: String): Supplier
+
+    @Query("SELECT * FROM Supplier WHERE nombreProv = :supplierName")
+    suspend fun getSupplierByName(supplierName: String): List<Supplier>
 
     @Query("DELETE FROM Supplier WHERE codigoProv = :supplierId")
     suspend fun deleteSupplierById(supplierId: String)
@@ -41,9 +47,9 @@ interface PeticionesDao {
 
     //Comprobamos si el código que recibe como parámetro existe en la entidad Customer
     @Query("SELECT EXISTS(SELECT 1 FROM Customer WHERE codigoCli = :customerId LIMIT 1)")
-    fun isCodigoCustomerExists(customerId: String): LiveData<Boolean>
+    suspend fun isCodigoCustomerExists(customerId: String): LiveData<Boolean>
 
     //Comprobamos si el código que recibe como parámetro existe en la entidad Supplier
     @Query("SELECT EXISTS(SELECT 1 FROM Supplier WHERE codigoProv = :supplierId LIMIT 1)")
-    fun isCodigoSupplierExists(supplierId: String): LiveData<Boolean>
+    suspend fun isCodigoSupplierExists(supplierId: String): LiveData<Boolean>
 }

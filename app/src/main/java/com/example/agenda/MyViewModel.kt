@@ -11,6 +11,9 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
     private val _customers = MutableLiveData<List<Customer>>()
     val customers: LiveData<List<Customer>> get() = _customers
 
+    private val _customer = MutableLiveData<List<Customer>>()
+    val customer: LiveData<List<Customer>> get() = _customer
+
     private val _customerDetails = MutableLiveData<Customer>()
     val customerDetails: LiveData<Customer> get() = _customerDetails
 
@@ -20,14 +23,24 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
     private val _suppliers = MutableLiveData<List<Supplier>>()
     val suppliers: LiveData<List<Supplier>> get() = _suppliers
 
+    private val _supplier = MutableLiveData<List<Supplier>>()
+    val supplier: LiveData<List<Supplier>> get() = _supplier
+
     fun insertCustomer(c: Customer) {
         viewModelScope.launch(Dispatchers.IO) {
             customerRepository.insertCustomer(c)
         }
     }
 
-    fun getAllCustomers(): List<Customer> {
+    /*fun getAllCustomers(): List<Customer> {
         return customerRepository.getAllCustomers()
+    }*/
+
+    fun loadCustomerByName(nombre: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            val customer = customerRepository.getCustomerByName(nombre)
+            _customer.postValue(customer)
+        }
     }
 
     fun loadCustomers() {
@@ -62,14 +75,21 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
         }
     }
 
-    fun getAllSuppliers(): List<Supplier> {
+    /*suspend fun getAllSuppliers(): List<Supplier> {
         return supplierRepository.getAllSuppliers()
-    }
+    }*/
 
     fun loadSuppliers() {
         viewModelScope.launch(Dispatchers.IO) {
             val suppliers = supplierRepository.getAllSuppliers()
             _suppliers.postValue(suppliers)
+        }
+    }
+
+    fun loadSupplierByName(nombre: String){
+        viewModelScope.launch(Dispatchers.IO) {
+            val supplier = supplierRepository.getSupplierByName(nombre)
+            _supplier.postValue(supplier)
         }
     }
 
@@ -93,11 +113,11 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
     }
 
 
-    fun existeCodigoCliente(codigo: String): LiveData<Boolean> {
-        return customerRepository.isCodigoCustomerExists(codigo)
+    suspend fun existeCodigoCliente(codigo: String): LiveData<Boolean> {
+            return customerRepository.isCodigoCustomerExists(codigo)
     }
 
-    fun existeCodigoProveedor(codigo: String): LiveData<Boolean> {
+    suspend fun existeCodigoProveedor(codigo: String): LiveData<Boolean> {
         return supplierRepository.isCodigoSupplierExists(codigo)
     }
 

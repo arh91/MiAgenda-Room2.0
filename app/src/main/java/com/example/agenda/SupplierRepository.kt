@@ -8,12 +8,16 @@ class SupplierRepository (private val peticionesDao: PeticionesDao) {
         peticionesDao.insertSupplier(s)
     }
 
-    fun getAllSuppliers(): List<Supplier> {
+    suspend fun getAllSuppliers(): List<Supplier> {
         return peticionesDao.getAllSuppliers()
     }
 
     suspend fun getSupplierDetails(supplierId: String): Supplier {
         return peticionesDao.getSupplierById(supplierId)
+    }
+
+    suspend fun getSupplierByName(supplierName: String): List<Supplier>{
+        return peticionesDao.getSupplierByName(supplierName)
     }
 
     suspend fun deleteSupplierById(supplierId: String){
@@ -25,7 +29,7 @@ class SupplierRepository (private val peticionesDao: PeticionesDao) {
     }
 
 
-    fun isCodigoSupplierExists(codigo: String): LiveData<Boolean> {
+    suspend fun isCodigoSupplierExists(codigo: String): LiveData<Boolean> {
         return peticionesDao.isCodigoSupplierExists(codigo)
     }
 }
