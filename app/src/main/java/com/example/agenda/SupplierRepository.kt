@@ -29,7 +29,7 @@ class SupplierRepository (private val peticionesDao: PeticionesDao) {
     }
 
 
-    suspend fun isCodigoSupplierExists(codigo: String): LiveData<Boolean> {
+    fun isCodigoSupplierExists(codigo: String): LiveData<Boolean> {
         return peticionesDao.isCodigoSupplierExists(codigo)
     }
 }

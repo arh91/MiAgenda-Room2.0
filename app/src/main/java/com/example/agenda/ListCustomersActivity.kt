@@ -3,7 +3,10 @@ package com.example.agenda
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,10 +18,25 @@ class ListCustomersActivity : AppCompatActivity(){
     lateinit var myViewModel: MyViewModel
     lateinit var customerAdapter: CustomersAdapter
     private lateinit var atras: Button
+    private lateinit var textViewNombre: TextView
+    private lateinit var nombreCliente: EditText
+    private lateinit var ok: Button
+    private lateinit var buscarCliPorNombre: Button
+    private lateinit var volverListaCli: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_customers)
+
+        textViewNombre = findViewById(R.id.textView_nombreCli)
+        nombreCliente = findViewById(R.id.editTextNombreCli)
+        ok = findViewById(R.id.btnOkCli)
+        volverListaCli = findViewById(R.id.btnVolverListaCli)
+
+        textViewNombre.visibility = View.GONE
+        nombreCliente.visibility = View.GONE
+        ok.visibility = View.GONE
+        volverListaCli.visibility = View.GONE
 
         val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
         val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
@@ -44,10 +62,41 @@ class ListCustomersActivity : AppCompatActivity(){
             startActivity(toFifth)
         }
 
-        //firebaseDatabase = FirebaseDatabase.getInstance()
+        buscarCliPorNombre = findViewById(R.id.findCustomerByName)
+        buscarCliPorNombre.setOnClickListener(){
+            recyclerView.visibility = View.GONE
+            atras.visibility = View.GONE
+            buscarCliPorNombre.visibility = View.GONE
+            textViewNombre.visibility = View.VISIBLE
+            nombreCliente.visibility = View.VISIBLE
+            ok.visibility = View.VISIBLE
+        }
 
-        // Inicializar la referencia a la base de datos de Firebase
-        //databaseReference = firebaseDatabase!!.getReference("MyDatabase").child("Clientes")
+        ok.setOnClickListener(){
+            val nombre = nombreCliente.text.toString()
+            myViewModel.loadCustomerByName(nombre)
+
+            myViewModel.customer.observe(this, Observer { customers ->
+                customerAdapter.setCustomers(customers)
+            })
+
+            textViewNombre.visibility = View.GONE
+            nombreCliente.visibility = View.GONE
+            ok.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+            volverListaCli.visibility = View.VISIBLE
+        }
+
+        volverListaCli.setOnClickListener(){
+            myViewModel.loadCustomers()
+            myViewModel.customers.observe(this, Observer { customers ->
+                customerAdapter.setCustomers(customers)
+            })
+
+            volverListaCli.visibility = View.GONE
+            atras.visibility = View.VISIBLE
+            buscarCliPorNombre.visibility = View.VISIBLE
+        }
 
         // Obtener datos de la base de datos y actualizar el RecyclerView
         myViewModel.loadCustomers()

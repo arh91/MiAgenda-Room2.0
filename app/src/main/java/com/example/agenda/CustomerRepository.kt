@@ -29,7 +29,7 @@ class CustomerRepository (private val peticionesDao: PeticionesDao) {
     }
 
 
-    suspend fun isCodigoCustomerExists(codigo: String): LiveData<Boolean> {
+    fun isCodigoCustomerExists(codigo: String): LiveData<Boolean> {
         return peticionesDao.isCodigoCustomerExists(codigo)
     }
 

@@ -50,9 +50,9 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
         }
     }
 
-    fun loadCustomerDetails(customerId: String) {
+    fun loadCustomerDetails(codigo: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val customer = customerRepository.getCustomerDetails(customerId)
+            val customer = customerRepository.getCustomerDetails(codigo)
             _customerDetails.postValue(customer)
         }
     }
@@ -93,9 +93,9 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
         }
     }
 
-    fun loadSupplierDetails(supplierId: String) {
+    fun loadSupplierDetails(codigo: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val supplier = supplierRepository.getSupplierDetails(supplierId)
+            val supplier = supplierRepository.getSupplierDetails(codigo)
             _supplierDetails.postValue(supplier)
         }
     }
@@ -112,12 +112,11 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
         }
     }
 
-
-    suspend fun existeCodigoCliente(codigo: String): LiveData<Boolean> {
+    fun existeCodigoCliente(codigo: String): LiveData<Boolean> {
             return customerRepository.isCodigoCustomerExists(codigo)
     }
 
-    suspend fun existeCodigoProveedor(codigo: String): LiveData<Boolean> {
+    fun existeCodigoProveedor(codigo: String): LiveData<Boolean> {
         return supplierRepository.isCodigoSupplierExists(codigo)
     }
 

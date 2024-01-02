@@ -3,7 +3,10 @@ package com.example.agenda
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,12 +18,26 @@ class ListSuppliersActivity : AppCompatActivity(){
     lateinit var myViewModel: MyViewModel
     lateinit var supplierAdapter: SuppliersAdapter
     private lateinit var atras: Button
-    //private lateinit var firebaseDatabase: FirebaseDatabase
-    //private lateinit var databaseReference: DatabaseReference
+    private lateinit var textViewNombre: TextView
+    private lateinit var nombreProveedor: EditText
+    private lateinit var ok: Button
+    private lateinit var buscarProvPorNombre: Button
+    private lateinit var volverListaProv: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_suppliers)
+
+        textViewNombre = findViewById(R.id.textView_nombreProv)
+        nombreProveedor = findViewById(R.id.editTextNombreProv)
+        ok = findViewById(R.id.btnOkProv)
+        volverListaProv = findViewById(R.id.btnVolverListaProv)
+
+        textViewNombre.visibility = View.GONE
+        nombreProveedor.visibility = View.GONE
+        ok.visibility = View.GONE
+        volverListaProv.visibility = View.GONE
 
         val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
         val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
@@ -46,8 +63,41 @@ class ListSuppliersActivity : AppCompatActivity(){
             startActivity(toFourth)
         }
 
-        myViewModel.loadSuppliers()
+        buscarProvPorNombre = findViewById(R.id.findSupplierByName)
+        buscarProvPorNombre.setOnClickListener(){
+            recyclerView.visibility = View.GONE
+            atras.visibility = View.GONE
+            buscarProvPorNombre.visibility = View.GONE
+            textViewNombre.visibility = View.VISIBLE
+            nombreProveedor.visibility = View.VISIBLE
+            ok.visibility = View.VISIBLE
+        }
 
+        ok.setOnClickListener(){
+            val nombre = nombreProveedor.text.toString()
+            myViewModel.loadSupplierByName(nombre)
+            myViewModel.supplier.observe(this, Observer { suppliers ->
+                supplierAdapter.setSuppliers(suppliers)
+            })
+
+            textViewNombre.visibility = View.GONE
+            nombreProveedor.visibility = View.GONE
+            ok.visibility = View.GONE
+            volverListaProv.visibility = View.VISIBLE
+            recyclerView.visibility = View.VISIBLE
+        }
+
+        volverListaProv.setOnClickListener(){
+            myViewModel.loadSuppliers()
+            myViewModel.suppliers.observe(this, Observer { suppliers ->
+                supplierAdapter.setSuppliers(suppliers)
+            })
+            volverListaProv.visibility = View.GONE
+            atras.visibility = View.VISIBLE
+            buscarProvPorNombre.visibility = View.VISIBLE
+        }
+
+        myViewModel.loadSuppliers()
         myViewModel.suppliers.observe(this, Observer { suppliers ->
             supplierAdapter.setSuppliers(suppliers)
         })
