@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 
 class SuppliersDetail : AppCompatActivity() {
@@ -35,6 +36,11 @@ class SuppliersDetail : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_suppliers_detail)
+
+        val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val factory = MyViewModelFactory(customerRepository, supplierRepository)
+        myViewModel = ViewModelProvider(this, factory).get(MyViewModel::class.java)
 
         codigoProveedor = findViewById(R.id.editText_codigo_prov)
         nombreProveedor = findViewById(R.id.editText_nombre_prov)
@@ -67,12 +73,12 @@ class SuppliersDetail : AppCompatActivity() {
 
         myViewModel.loadSupplierDetails(code)
 
-        myViewModel.customerDetails.observe(this, Observer { customer ->
+        myViewModel.supplierDetails.observe(this, Observer { supplier ->
             // Aquí actualizas tu interfaz de usuario con los detalles del cliente
             // Puedes acceder a los campos de customer, por ejemplo, customer.nombre, customer.direccion, etc.
-            val nombre = customer.nombreCli
-            val direccion = customer.direccionCli
-            val telefono = customer.telefonoCli
+            val nombre = supplier.nombreProv
+            val direccion = supplier.direccionProv
+            val telefono = supplier.telefonoProv
 
             codigoProveedor.setText(code)
             nombreProveedor.setText(nombre)

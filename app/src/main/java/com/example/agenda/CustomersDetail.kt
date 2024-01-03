@@ -36,7 +36,10 @@ class CustomersDetail : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_customers_detail)
 
-        myViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
+        val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val factory = MyViewModelFactory(customerRepository, supplierRepository)
+        myViewModel = ViewModelProvider(this, factory).get(MyViewModel::class.java)
 
         codigoCliente = findViewById(R.id.editText_codigo_cli)
         nombreCliente = findViewById(R.id.editText_nombre_cli)
@@ -142,7 +145,7 @@ class CustomersDetail : AppCompatActivity() {
                 // Si alguno de los campos está sin rellenar, lanzamos aviso al usuario para que los rellene todos.
                 Toast.makeText(this@CustomersDetail, "Por favor, rellena todos los campos.", Toast.LENGTH_SHORT).show()
             } else if(nombre==nombreAntiguo && direccion==direccionAntigua && telefono==telefonoAntiguo){
-            Toast.makeText(this@CustomersDetail, "No se ha modificado ningún campo.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CustomersDetail, "No se ha modificado ningún campo.", Toast.LENGTH_SHORT).show()
             } else {
                 alertDialog.apply {
                     setTitle("Advertencia")
