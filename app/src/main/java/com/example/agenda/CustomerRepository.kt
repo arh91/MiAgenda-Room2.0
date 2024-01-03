@@ -1,6 +1,7 @@
 package com.example.agenda
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 class CustomerRepository (private val peticionesDao: PeticionesDao) {
 
@@ -31,6 +32,10 @@ class CustomerRepository (private val peticionesDao: PeticionesDao) {
 
     fun isCodigoCustomerExists(codigo: String): LiveData<Boolean> {
         return peticionesDao.isCodigoCustomerExists(codigo)
+    }
+
+    suspend fun obtenerNumeroClientes(): Int {
+        return peticionesDao.getNumberOfCustomers()
     }
 
 }

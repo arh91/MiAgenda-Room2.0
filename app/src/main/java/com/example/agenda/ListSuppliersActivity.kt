@@ -1,16 +1,22 @@
 package com.example.agenda
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 
 class ListSuppliersActivity : AppCompatActivity(){
 
@@ -102,41 +108,25 @@ class ListSuppliersActivity : AppCompatActivity(){
             supplierAdapter.setSuppliers(suppliers)
         })
 
-        //firebaseDatabase = FirebaseDatabase.getInstance()
-
-        // Inicializar la referencia a la base de datos de Firebase
-        //databaseReference = firebaseDatabase!!.getReference("MyDatabase").child("Proveedores")
-
-        // Obtener datos de la base de datos y actualizar el RecyclerView
-        //listarRegistrosProveedores()
+        myViewModel.viewModelScope.launch {
+            if (myViewModel.obtenerNumeroProveedores()==0) {
+                mostrarToastEnLaMitadDeLaPantalla("No existe ningún proveedor en la base de datos")
+            }
+        }
     }
 
-    /*private fun listarRegistrosProveedores() {
-        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val dataList = mutableListOf<String>()
+    private fun mostrarToastEnLaMitadDeLaPantalla(mensaje: String) {
+        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layout = inflater.inflate(R.layout.custom_toast_layout, findViewById(R.id.custom_toast_root))
 
-                for (dataSnapshot in snapshot.children) {
-                    val code = dataSnapshot.child("codigo").getValue(String::class.java)
-                    code?.let { dataList.add(it) }
-                }
+        // Crea un objeto Toast personalizado con la vista personalizada
+        val toast = Toast(applicationContext)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = layout
+        layout.findViewById<TextView>(R.id.custom_toast_text).text = mensaje
 
-                val adapter = SuppliersAdapter(dataList, this@ListSuppliersActivity)
-                recyclerView.adapter = adapter
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Si los datos no se han podido mostrar correctamente, lanzamos aviso al usuario
-                Toast.makeText(this@ListSuppliersActivity, "No se pudieron obtener los datos. $error", Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
-    }*/
-
-    /*override fun accederDatosProveedor(code: String) {
-        // Al hacer clic en un elemento, abrir la actividad de detalles
-        val intent = Intent(this, SuppliersDetail::class.java)
-        intent.putExtra("code", code)
-        startActivity(intent)
-    }*/
+        // Muestra el Toast personalizado
+        toast.show()
+    }
 }

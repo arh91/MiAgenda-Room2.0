@@ -32,10 +32,6 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
         }
     }
 
-    /*fun getAllCustomers(): List<Customer> {
-        return customerRepository.getAllCustomers()
-    }*/
-
     fun loadCustomerByName(nombre: String){
         viewModelScope.launch(Dispatchers.IO) {
             val customer = customerRepository.getCustomerByName(nombre)
@@ -74,10 +70,6 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
             supplierRepository.insertSupplier(s)
         }
     }
-
-    /*suspend fun getAllSuppliers(): List<Supplier> {
-        return supplierRepository.getAllSuppliers()
-    }*/
 
     fun loadSuppliers() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -118,6 +110,14 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
 
     fun existeCodigoProveedor(codigo: String): LiveData<Boolean> {
         return supplierRepository.isCodigoSupplierExists(codigo)
+    }
+
+    suspend fun obtenerNumeroClientes(): Int {
+        return customerRepository.obtenerNumeroClientes()
+    }
+
+    suspend fun obtenerNumeroProveedores(): Int {
+        return supplierRepository.obtenerNumeroProveedores()
     }
 
 }

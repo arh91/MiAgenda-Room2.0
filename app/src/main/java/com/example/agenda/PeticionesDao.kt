@@ -52,4 +52,10 @@ interface PeticionesDao {
     //Comprobamos si el código que recibe como parámetro existe en la entidad Supplier
     @Query("SELECT EXISTS(SELECT 1 FROM Supplier WHERE codigoProv = :supplierId LIMIT 1)")
     fun isCodigoSupplierExists(supplierId: String): LiveData<Boolean>
+
+    @Query("SELECT COUNT(*) FROM Customer")
+    suspend fun getNumberOfCustomers(): Int
+
+    @Query("SELECT COUNT(*) FROM Supplier")
+    suspend fun getNumberOfSuppliers(): Int
 }

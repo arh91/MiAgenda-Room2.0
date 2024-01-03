@@ -1,18 +1,24 @@
 package com.example.agenda
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.launch
 
-class ListCustomersActivity : AppCompatActivity(){
+class ListCustomersActivity: AppCompatActivity(){
 
     private lateinit var recyclerView: RecyclerView
     lateinit var myViewModel: MyViewModel
@@ -38,8 +44,10 @@ class ListCustomersActivity : AppCompatActivity(){
         ok.visibility = View.GONE
         volverListaCli.visibility = View.GONE
 
-        val customerRepository = CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
-        val supplierRepository = SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val customerRepository =
+            CustomerRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
+        val supplierRepository =
+            SupplierRepository(AgendaDatabase.getInstance(applicationContext).peticionesDao())
         val factory = MyViewModelFactory(customerRepository, supplierRepository)
         myViewModel = ViewModelProvider(this, factory).get(MyViewModel::class.java)
 
@@ -57,13 +65,13 @@ class ListCustomersActivity : AppCompatActivity(){
         recyclerView.adapter = customerAdapter
 
         atras = findViewById(R.id.btnAtrasRegistroClientes)
-        atras.setOnClickListener(){
+        atras.setOnClickListener() {
             val toFifth = Intent(this, FifthActivity::class.java)
             startActivity(toFifth)
         }
 
         buscarCliPorNombre = findViewById(R.id.findCustomerByName)
-        buscarCliPorNombre.setOnClickListener(){
+        buscarCliPorNombre.setOnClickListener() {
             recyclerView.visibility = View.GONE
             atras.visibility = View.GONE
             buscarCliPorNombre.visibility = View.GONE
@@ -72,7 +80,7 @@ class ListCustomersActivity : AppCompatActivity(){
             ok.visibility = View.VISIBLE
         }
 
-        ok.setOnClickListener(){
+        ok.setOnClickListener() {
             val nombre = nombreCliente.text.toString()
             myViewModel.loadCustomerByName(nombre)
 
@@ -87,7 +95,7 @@ class ListCustomersActivity : AppCompatActivity(){
             volverListaCli.visibility = View.VISIBLE
         }
 
-        volverListaCli.setOnClickListener(){
+        volverListaCli.setOnClickListener() {
             myViewModel.loadCustomers()
             myViewModel.customers.observe(this, Observer { customers ->
                 customerAdapter.setCustomers(customers)
@@ -104,34 +112,29 @@ class ListCustomersActivity : AppCompatActivity(){
         myViewModel.customers.observe(this, Observer { customers ->
             customerAdapter.setCustomers(customers)
         })
+
+        myViewModel.viewModelScope.launch {
+            if (myViewModel.obtenerNumeroClientes()==0) {
+                mostrarToastEnLaMitadDeLaPantalla("No existe ningún cliente en la base de datos")
+            }
+        }
+
     }
 
-    /*private fun listarRegistrosClientes() {
-        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val dataList = mutableListOf<String>()
 
-                for (dataSnapshot in snapshot.children) {
-                    val code = dataSnapshot.child("codigo").getValue(String::class.java)
-                    code?.let { dataList.add(it) }
-                }
+    private fun mostrarToastEnLaMitadDeLaPantalla(mensaje: String) {
+        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val layout = inflater.inflate(R.layout.custom_toast_layout, findViewById(R.id.custom_toast_root))
 
-                val adapter = CustomersAdapter(dataList, this@ListCustomersActivity)
-                recyclerView.adapter = adapter
-            }
+        // Crea un objeto Toast personalizado con la vista personalizada
+        val toast = Toast(applicationContext)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = layout
+        layout.findViewById<TextView>(R.id.custom_toast_text).text = mensaje
 
-            override fun onCancelled(error: DatabaseError) {
-                // Si los datos no se han podido mostrar correctamente, lanzamos aviso al usuario
-                Toast.makeText(this@ListCustomersActivity, "No se pudieron obtener los datos. $error", Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
-    }*/
+        // Muestra el Toast personalizado
+        toast.show()
+    }
 
-    /*override fun accederDatosCliente(code: String) {
-        // Al hacer clic en un elemento, abrir la actividad de detalles
-        val intent = Intent(this, CustomersDetail::class.java)
-        intent.putExtra("code", code)
-        startActivity(intent)
-    }*/
 }

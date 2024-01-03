@@ -28,8 +28,11 @@ class SupplierRepository (private val peticionesDao: PeticionesDao) {
         peticionesDao.updateSupplierById(codigo, nuevoNombre, nuevaDireccion, nuevoTelefono)
     }
 
-
     fun isCodigoSupplierExists(codigo: String): LiveData<Boolean> {
         return peticionesDao.isCodigoSupplierExists(codigo)
+    }
+
+    suspend fun obtenerNumeroProveedores(): Int {
+        return peticionesDao.getNumberOfSuppliers()
     }
 }
