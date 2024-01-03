@@ -24,6 +24,10 @@ class SuppliersAdapter (private val onItemClickListener: (String) -> Unit) :
     override fun onBindViewHolder(holder: SupplierViewHolder, position: Int) {
         val supplier = getItem(position)
         holder.bind(supplier, onItemClickListener)
+
+        /*holder.itemView.setOnClickListener {
+            onItemClickListener.accederDatosProveedor(item)
+        }*/
     }
 
     /*override fun getItemCount(): Int {

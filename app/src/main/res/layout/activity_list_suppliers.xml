@@ -8,33 +8,34 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="369dp"
+        android:layout_height="674dp"
+        android:layout_marginBottom="2dp"
         android:clipToPadding="false"
         android:padding="16dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tituloListaProv" />
 
     <Button
         android:id="@+id/btnAtrasRegistroProveedores"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginEnd="8dp"
         android:text="ATRÁS"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/findSupplierByName"
         app:layout_constraintEnd_toStartOf="@+id/findSupplierByName"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/findSupplierByName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="34dp"
         android:text="Buscar por nombre"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,41 +45,57 @@
         android:id="@+id/textView_nombreProv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="82dp"
-        android:layout_marginBottom="275dp"
+        android:layout_marginBottom="15dp"
         android:text="Introduzca un nombre de proveedor:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/editTextNombreProv"
+        app:layout_constraintStart_toStartOf="@+id/editTextNombreProv" />
 
     <EditText
         android:id="@+id/editTextNombreProv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="198dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/textView_nombreProv"
-        app:layout_constraintTop_toBottomOf="@+id/textView_nombreProv" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btnOkProv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginStart="170dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="115dp"
         android:text="OK"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNombreProv"
-        app:layout_constraintStart_toStartOf="@+id/editTextNombreProv"
+        app:layout_constraintEnd_toEndOf="@+id/findSupplierByName"
+        app:layout_constraintStart_toStartOf="@+id/btnAtrasRegistroProveedores"
         app:layout_constraintTop_toBottomOf="@+id/editTextNombreProv" />
 
     <Button
         android:id="@+id/btnVolverListaProv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="14dp"
         android:text="Volver"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
+    <TextView
+        android:id="@+id/tituloListaProv"
+        android:layout_width="260dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="9dp"
+        android:text="LISTADO PROVEEDORES"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

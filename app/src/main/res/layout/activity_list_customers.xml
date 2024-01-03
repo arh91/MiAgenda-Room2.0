@@ -8,33 +8,34 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="369dp"
+        android:layout_height="674dp"
+        android:layout_marginBottom="2dp"
         android:clipToPadding="false"
         android:padding="16dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tituloListaCli" />
 
     <Button
         android:id="@+id/btnAtrasRegistroClientes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginEnd="8dp"
         android:text="ATRÁS"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/findCustomerByName"
         app:layout_constraintEnd_toStartOf="@+id/findCustomerByName"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/findCustomerByName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="34dp"
         android:text="Buscar por nombre"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,41 +45,57 @@
         android:id="@+id/textView_nombreCli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="82dp"
-        android:layout_marginBottom="275dp"
+        android:layout_marginBottom="15dp"
         android:text="Introduzca un nombre de cliente:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/editTextNombreCli"
+        app:layout_constraintStart_toStartOf="@+id/editTextNombreCli" />
 
     <EditText
         android:id="@+id/editTextNombreCli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="198dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="@+id/textView_nombreCli"
-        app:layout_constraintTop_toBottomOf="@+id/textView_nombreCli" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btnOkCli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginStart="170dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="115dp"
         android:text="OK"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNombreCli"
-        app:layout_constraintStart_toStartOf="@+id/editTextNombreCli"
+        app:layout_constraintEnd_toEndOf="@+id/findCustomerByName"
+        app:layout_constraintStart_toStartOf="@+id/btnAtrasRegistroClientes"
         app:layout_constraintTop_toBottomOf="@+id/editTextNombreCli" />
 
     <Button
         android:id="@+id/btnVolverListaCli"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="14dp"
         android:text="Volver"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView" />
+
+    <TextView
+        android:id="@+id/tituloListaCli"
+        android:layout_width="248dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="9dp"
+        android:text="LISTADO CLIENTES"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
