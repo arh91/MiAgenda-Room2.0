@@ -58,4 +58,10 @@ interface PeticionesDao {
 
     @Query("SELECT COUNT(*) FROM Supplier")
     suspend fun getNumberOfSuppliers(): Int
+
+    @Query("SELECT COUNT(*) FROM Customer WHERE nombreCli = :customerName")
+    suspend fun getNumberOfCustomersByName(customerName: String): Int
+
+    @Query("SELECT COUNT(*) FROM Supplier WHERE nombreProv = :supplierName")
+    suspend fun getNumberOfSuppliersByName(supplierName: String): Int
 }

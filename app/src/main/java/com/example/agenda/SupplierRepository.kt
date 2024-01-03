@@ -35,4 +35,8 @@ class SupplierRepository (private val peticionesDao: PeticionesDao) {
     suspend fun obtenerNumeroProveedores(): Int {
         return peticionesDao.getNumberOfSuppliers()
     }
+
+    suspend fun obtenerNumeroProveedoresPorNombre(nombre: String): Int {
+        return peticionesDao.getNumberOfSuppliersByName(nombre)
+    }
 }

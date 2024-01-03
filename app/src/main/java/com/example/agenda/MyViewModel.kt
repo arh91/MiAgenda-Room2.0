@@ -120,4 +120,12 @@ class MyViewModel(private val customerRepository: CustomerRepository, private va
         return supplierRepository.obtenerNumeroProveedores()
     }
 
+    suspend fun obtenerNumeroClientesPorNombre(nombre: String): Int {
+        return customerRepository.obtenerNumeroClientesPorNombre(nombre)
+    }
+
+    suspend fun obtenerNumeroProveedoresPorNombre(nombre: String): Int {
+        return supplierRepository.obtenerNumeroProveedoresPorNombre(nombre)
+    }
+
 }

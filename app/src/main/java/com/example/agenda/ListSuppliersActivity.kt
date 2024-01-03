@@ -91,6 +91,12 @@ class ListSuppliersActivity : AppCompatActivity(){
             ok.visibility = View.GONE
             volverListaProv.visibility = View.VISIBLE
             recyclerView.visibility = View.VISIBLE
+
+            myViewModel.viewModelScope.launch{
+                if(myViewModel.obtenerNumeroProveedoresPorNombre(nombre)==0){
+                    mostrarToastEnLaMitadDeLaPantalla("No existe ningún proveedor con ese nombre en la base de datos.")
+                }
+            }
         }
 
         volverListaProv.setOnClickListener(){

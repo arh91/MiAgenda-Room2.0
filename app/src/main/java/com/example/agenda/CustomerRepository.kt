@@ -38,4 +38,8 @@ class CustomerRepository (private val peticionesDao: PeticionesDao) {
         return peticionesDao.getNumberOfCustomers()
     }
 
+    suspend fun obtenerNumeroClientesPorNombre(nombre: String): Int {
+        return peticionesDao.getNumberOfCustomersByName(nombre)
+    }
+
 }

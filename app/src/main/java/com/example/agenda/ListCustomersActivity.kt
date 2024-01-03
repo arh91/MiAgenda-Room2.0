@@ -93,6 +93,12 @@ class ListCustomersActivity: AppCompatActivity(){
             ok.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
             volverListaCli.visibility = View.VISIBLE
+
+            myViewModel.viewModelScope.launch{
+                if(myViewModel.obtenerNumeroClientesPorNombre(nombre)==0){
+                    mostrarToastEnLaMitadDeLaPantalla("No existe ningún cliente con ese nombre en la base de datos.")
+                }
+            }
         }
 
         volverListaCli.setOnClickListener() {
