@@ -117,6 +117,7 @@ class CustomersDetail : AppCompatActivity() {
                         ).show()
                     }
                     setNegativeButton("Cancelar") { _, _ ->
+                        volverAListaClientes()
                         Toast.makeText(context, "Operación cancelada", Toast.LENGTH_SHORT).show()
                     }
                 }.create().show()
@@ -157,6 +158,7 @@ class CustomersDetail : AppCompatActivity() {
                         volverAListaClientes()
                     }
                     setNegativeButton("Cancelar") { _, _ ->
+                        volverAListaClientes()
                         Toast.makeText(context, "Operación cancelada", Toast.LENGTH_SHORT).show()
                     }
                 }.create().show()

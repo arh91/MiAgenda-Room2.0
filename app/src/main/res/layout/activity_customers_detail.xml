@@ -120,7 +120,7 @@
         android:layout_height="29dp"
         android:layout_marginTop="65dp"
         android:layout_marginBottom="64dp"
-        android:text="CLIENTE:"
+        android:text="DETALLES"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/editText_codigo_cli"
