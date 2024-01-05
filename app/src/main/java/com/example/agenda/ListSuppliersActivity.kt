@@ -11,9 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
@@ -82,7 +80,7 @@ class ListSuppliersActivity : AppCompatActivity(){
         ok.setOnClickListener(){
             val nombre = nombreProveedor.text.toString()
             myViewModel.loadSupplierByName(nombre)
-            myViewModel.supplier.observe(this, Observer { suppliers ->
+            myViewModel.supplier.observeOnce(this, Observer { suppliers ->
                 supplierAdapter.setSuppliers(suppliers)
             })
 
@@ -101,7 +99,7 @@ class ListSuppliersActivity : AppCompatActivity(){
 
         volverListaProv.setOnClickListener(){
             myViewModel.loadSuppliers()
-            myViewModel.suppliers.observe(this, Observer { suppliers ->
+            myViewModel.suppliers.observeOnce(this, Observer { suppliers ->
                 supplierAdapter.setSuppliers(suppliers)
             })
             volverListaProv.visibility = View.GONE
@@ -110,7 +108,7 @@ class ListSuppliersActivity : AppCompatActivity(){
         }
 
         myViewModel.loadSuppliers()
-        myViewModel.suppliers.observe(this, Observer { suppliers ->
+        myViewModel.suppliers.observeOnce(this, Observer { suppliers ->
             supplierAdapter.setSuppliers(suppliers)
         })
 
@@ -134,5 +132,14 @@ class ListSuppliersActivity : AppCompatActivity(){
 
         // Muestra el Toast personalizado
         toast.show()
+    }
+
+    fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<in T>) {
+        observe(owner, object : Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 }

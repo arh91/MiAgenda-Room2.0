@@ -7,6 +7,8 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
@@ -69,7 +71,7 @@ class FifthActivity : AppCompatActivity() {
             var telefonoCliente: String = telefonoCliente.text.toString()
             var direccionCliente: String = direccionCliente.text.toString()
 
-            myViewModel.existeCodigoCliente(codigoCliente).observe(this, Observer { codigoExists ->
+            myViewModel.existeCodigoCliente(codigoCliente).observeOnce(this, Observer { codigoExists ->
                 if (codigoExists) {
                     // Si el código ya existe en la base de datos, lanzar mensaje de aviso al usuario
                     Toast.makeText(this@FifthActivity, "El código introducido ya existe en la base de datos.", Toast.LENGTH_SHORT).show()
@@ -115,6 +117,15 @@ class FifthActivity : AppCompatActivity() {
        nombreCliente.setText("")
        direccionCliente.setText("")
        telefonoCliente.setText("")
+    }
+
+    fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<in T>) {
+        observe(owner, object : Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 
 }

@@ -7,6 +7,8 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
@@ -53,7 +55,7 @@ class FourthActivity : AppCompatActivity() {
             var telefonoProveedor: String = telefonoProveedor.text.toString()
             var direccionProveedor: String = direccionProveedor.text.toString()
 
-            myViewModel.existeCodigoProveedor(codigoProveedor).observe(this, Observer { codigoExists ->
+            myViewModel.existeCodigoProveedor(codigoProveedor).observeOnce(this, Observer { codigoExists ->
                 if (codigoExists) {
                     // Si el código ya existe en la base de datos, lanzar mensaje de aviso al usuario
                     Toast.makeText(this@FourthActivity, "El código introducido ya existe en la base de datos.", Toast.LENGTH_SHORT).show()
@@ -90,13 +92,21 @@ class FourthActivity : AppCompatActivity() {
         Toast.makeText(this@FourthActivity, "Datos guardados.", Toast.LENGTH_SHORT).show()
     }
 
-
     //Método que vuelve a dejar en blanco todos los campos del layout
     fun limpiarTodosLosCampos(){
         codigoProveedor.setText("")
         nombreProveedor.setText("")
         direccionProveedor.setText("")
         telefonoProveedor.setText("")
+    }
+
+    fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<in T>) {
+        observe(owner, object : Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 
 }

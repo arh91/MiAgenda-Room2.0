@@ -10,6 +10,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
@@ -73,7 +75,7 @@ class SuppliersDetail : AppCompatActivity() {
 
         myViewModel.loadSupplierDetails(code)
 
-        myViewModel.supplierDetails.observe(this, Observer { supplier ->
+        myViewModel.supplierDetails.observeOnce(this, Observer { supplier ->
             // Aquí actualizas tu interfaz de usuario con los detalles del cliente
             // Puedes acceder a los campos de customer, por ejemplo, customer.nombre, customer.direccion, etc.
             val nombre = supplier.nombreProv
@@ -98,7 +100,7 @@ class SuppliersDetail : AppCompatActivity() {
         val alertDialog = AlertDialog.Builder(context)
         val codigo = codigoProveedor.text.toString()
 
-        myViewModel.existeCodigoProveedor(codigo).observe(this, Observer { codigoExists ->
+        myViewModel.existeCodigoProveedor(codigo).observeOnce(this, Observer { codigoExists ->
             if (!codigoExists) {
                 // Si el código no existe en la base de datos, lanzar mensaje de aviso al usuario
                 Toast.makeText(this@SuppliersDetail, "El código introducido no existe en la base de datos.", Toast.LENGTH_SHORT).show()
@@ -130,7 +132,7 @@ class SuppliersDetail : AppCompatActivity() {
         val nombre = nombreProveedor.text.toString()
         val telefono = telefonoProveedor.text.toString()
 
-        myViewModel.existeCodigoProveedor(codigo).observe(this, Observer { codigoExists ->
+        myViewModel.existeCodigoProveedor(codigo).observeOnce(this, Observer { codigoExists ->
             if (!codigoExists) {
                 // Si el código no existe en la base de datos, lanzar mensaje de aviso al usuario
                 Toast.makeText(this@SuppliersDetail, "El código introducido no existe en la base de datos.", Toast.LENGTH_SHORT).show()
@@ -172,5 +174,14 @@ class SuppliersDetail : AppCompatActivity() {
     private fun volverAListaProveedores(){
         val intentListSuppliers = Intent(this, ListSuppliersActivity::class.java)
         startActivity(intentListSuppliers)
+    }
+
+    fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<in T>) {
+        observe(owner, object : Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 }

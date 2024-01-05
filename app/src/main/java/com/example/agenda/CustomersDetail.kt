@@ -10,8 +10,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Observer
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer as Observer
 
 
 class CustomersDetail : AppCompatActivity() {
@@ -72,7 +74,7 @@ class CustomersDetail : AppCompatActivity() {
 
         myViewModel.loadCustomerDetails(code)
 
-        myViewModel.customerDetails.observe(this, Observer { customer ->
+        myViewModel.customerDetails.observeOnce(this, Observer { customer ->
             // Aquí actualizas tu interfaz de usuario con los detalles del cliente
             // Puedes acceder a los campos de customer, por ejemplo, customer.nombre, customer.direccion, etc.
             val nombre = customer.nombreCli
@@ -97,7 +99,7 @@ class CustomersDetail : AppCompatActivity() {
         val alertDialog = AlertDialog.Builder(context)
         val codigo = codigoCliente.text.toString()
 
-        myViewModel.existeCodigoCliente(codigo).observe(this, Observer { codigoExists ->
+        myViewModel.existeCodigoCliente(codigo).observeOnce(this, Observer { codigoExists ->
             if (!codigoExists) {
                 // Si el código no existe en la base de datos, lanzar mensaje de aviso al usuario
                 Toast.makeText(this@CustomersDetail, "El código introducido no existe en la base de datos.", Toast.LENGTH_SHORT).show()
@@ -134,7 +136,7 @@ class CustomersDetail : AppCompatActivity() {
         val direccion = direccionCliente.text.toString()
         val telefono = telefonoCliente.text.toString()
 
-        myViewModel.existeCodigoCliente(codigo).observe(this, Observer { codigoExists ->
+        myViewModel.existeCodigoCliente(codigo).observeOnce(this, Observer { codigoExists ->
             if (!codigoExists) {
                 // Si el código no existe en la base de datos, lanzar mensaje de aviso al usuario
                 Toast.makeText(
@@ -179,4 +181,13 @@ class CustomersDetail : AppCompatActivity() {
         startActivity(intentListCustomers)
     }
 
+    fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<in T>) {
+        observe(owner, object : Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
+    }
+    
 }

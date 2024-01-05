@@ -11,9 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
@@ -84,7 +82,7 @@ class ListCustomersActivity: AppCompatActivity(){
             val nombre = nombreCliente.text.toString()
             myViewModel.loadCustomerByName(nombre)
 
-            myViewModel.customer.observe(this, Observer { customers ->
+            myViewModel.customer.observeOnce(this, Observer { customers ->
                 customerAdapter.setCustomers(customers)
             })
 
@@ -103,7 +101,7 @@ class ListCustomersActivity: AppCompatActivity(){
 
         volverListaCli.setOnClickListener() {
             myViewModel.loadCustomers()
-            myViewModel.customers.observe(this, Observer { customers ->
+            myViewModel.customers.observeOnce(this, Observer { customers ->
                 customerAdapter.setCustomers(customers)
             })
 
@@ -115,7 +113,7 @@ class ListCustomersActivity: AppCompatActivity(){
         // Obtener datos de la base de datos y actualizar el RecyclerView
         myViewModel.loadCustomers()
 
-        myViewModel.customers.observe(this, Observer { customers ->
+        myViewModel.customers.observeOnce(this, Observer { customers ->
             customerAdapter.setCustomers(customers)
         })
 
@@ -141,6 +139,15 @@ class ListCustomersActivity: AppCompatActivity(){
 
         // Muestra el Toast personalizado
         toast.show()
+    }
+
+    fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<in T>) {
+        observe(owner, object : Observer<T> {
+            override fun onChanged(t: T) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
+        })
     }
 
 }
