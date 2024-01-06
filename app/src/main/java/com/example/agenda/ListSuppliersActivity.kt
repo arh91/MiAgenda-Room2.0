@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -75,24 +76,29 @@ class ListSuppliersActivity : AppCompatActivity(){
             textViewNombre.visibility = View.VISIBLE
             nombreProveedor.visibility = View.VISIBLE
             ok.visibility = View.VISIBLE
+            volverListaProv.visibility = View.VISIBLE
         }
 
         ok.setOnClickListener(){
             val nombre = nombreProveedor.text.toString()
-            myViewModel.loadSupplierByName(nombre)
-            myViewModel.supplier.observeOnce(this, Observer { suppliers ->
-                supplierAdapter.setSuppliers(suppliers)
-            })
 
-            textViewNombre.visibility = View.GONE
-            nombreProveedor.visibility = View.GONE
-            ok.visibility = View.GONE
-            volverListaProv.visibility = View.VISIBLE
-            recyclerView.visibility = View.VISIBLE
+            if(TextUtils.isEmpty(nombre)){
+                mostrarToastEnLaMitadDeLaPantalla("Por favor, introduzca un nombre.")
+            }else{
+                myViewModel.loadSupplierByName(nombre)
+                myViewModel.supplier.observeOnce(this, Observer { suppliers ->
+                    supplierAdapter.setSuppliers(suppliers)
+                })
 
-            myViewModel.viewModelScope.launch{
-                if(myViewModel.obtenerNumeroProveedoresPorNombre(nombre)==0){
-                    mostrarToastEnLaMitadDeLaPantalla("No existe ningún proveedor con ese nombre en la base de datos.")
+                textViewNombre.visibility = View.GONE
+                nombreProveedor.visibility = View.GONE
+                ok.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+
+                myViewModel.viewModelScope.launch{
+                    if(myViewModel.obtenerNumeroProveedoresPorNombre(nombre)==0){
+                        mostrarToastEnLaMitadDeLaPantalla("No existe ningún proveedor con ese nombre en la base de datos.")
+                    }
                 }
             }
         }
@@ -102,7 +108,11 @@ class ListSuppliersActivity : AppCompatActivity(){
             myViewModel.suppliers.observeOnce(this, Observer { suppliers ->
                 supplierAdapter.setSuppliers(suppliers)
             })
+            textViewNombre.visibility = View.GONE
+            nombreProveedor.visibility = View.GONE
+            ok.visibility = View.GONE
             volverListaProv.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
             atras.visibility = View.VISIBLE
             buscarProvPorNombre.visibility = View.VISIBLE
         }

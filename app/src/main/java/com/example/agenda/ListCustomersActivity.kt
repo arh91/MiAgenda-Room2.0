@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -76,25 +77,30 @@ class ListCustomersActivity: AppCompatActivity(){
             textViewNombre.visibility = View.VISIBLE
             nombreCliente.visibility = View.VISIBLE
             ok.visibility = View.VISIBLE
+            volverListaCli.visibility = View.VISIBLE
         }
 
         ok.setOnClickListener() {
             val nombre = nombreCliente.text.toString()
-            myViewModel.loadCustomerByName(nombre)
 
-            myViewModel.customer.observeOnce(this, Observer { customers ->
-                customerAdapter.setCustomers(customers)
-            })
+            if(TextUtils.isEmpty(nombre)){
+                mostrarToastEnLaMitadDeLaPantalla("Por favor, introduzca un nombre.")
+            }else{
+                myViewModel.loadCustomerByName(nombre)
 
-            textViewNombre.visibility = View.GONE
-            nombreCliente.visibility = View.GONE
-            ok.visibility = View.GONE
-            recyclerView.visibility = View.VISIBLE
-            volverListaCli.visibility = View.VISIBLE
+                myViewModel.customer.observeOnce(this, Observer { customers ->
+                    customerAdapter.setCustomers(customers)
+                })
 
-            myViewModel.viewModelScope.launch{
-                if(myViewModel.obtenerNumeroClientesPorNombre(nombre)==0){
-                    mostrarToastEnLaMitadDeLaPantalla("No existe ningún cliente con ese nombre en la base de datos.")
+                textViewNombre.visibility = View.GONE
+                nombreCliente.visibility = View.GONE
+                ok.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+
+                myViewModel.viewModelScope.launch{
+                    if(myViewModel.obtenerNumeroClientesPorNombre(nombre)==0){
+                        mostrarToastEnLaMitadDeLaPantalla("No existe ningún cliente con ese nombre en la base de datos.")
+                    }
                 }
             }
         }
@@ -105,7 +111,11 @@ class ListCustomersActivity: AppCompatActivity(){
                 customerAdapter.setCustomers(customers)
             })
 
+            textViewNombre.visibility = View.GONE
+            nombreCliente.visibility = View.GONE
+            ok.visibility = View.GONE
             volverListaCli.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
             atras.visibility = View.VISIBLE
             buscarCliPorNombre.visibility = View.VISIBLE
         }
