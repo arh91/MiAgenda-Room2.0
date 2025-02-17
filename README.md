@@ -36,7 +36,7 @@ To get started with the app, follow these steps:
 1. Clone this repository:
 
 ```sh
-git clone https://github.com/arh91/MiAgenda-Firebase2.0.git
+git clone https://github.com/arh91/MiAgenda-Room2.0.git
 ```
 2. Open the project in Android Studio.
 
