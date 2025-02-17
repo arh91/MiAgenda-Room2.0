@@ -54,7 +54,7 @@ git clone https://github.com/arh91/MiAgenda-Room2.0.git
 
 ## Author
 
-👤 **ARH91**
+👤 **arh91**
 
 
 ## Contributing
